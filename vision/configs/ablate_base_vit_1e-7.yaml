@@ -1,0 +1,33 @@
+reproducibility_configs:
+    "reproduce": False
+    "random_seed": None
+
+dataloader_configs:
+    "batch_size": 32
+    "num_workers": 16
+    "shuffle": True
+
+circuit_configs:
+    "mask_method": "continuous_sparsification"
+    "mask_hparams":
+        "ablation": "none"
+        "mask_unit": "weight"
+        "mask_bias": False
+        "mask_init_value": -0.1
+    "freeze_base" : True
+    "add_l0" : True
+    "l0_lambda" : 1.0e-6
+
+train_configs:
+    "wandb_project": "vit_ablate"
+    "n_epochs": 100
+    "final_temp": 100
+    "hf_pretrained": "google/vit-base-patch16-224" # Pretrained to load for original ResNet & Feature Extractor
+    "model_path": "checkpoints/vit_base_16class" # The 16-class adapted model path, model should match w prev line
+    "output_path": "checkpoints/vit_ablated_1e-6_b32"
+    "verbose": True # Will print more intermediate status if True
+
+### Optimizer configs
+optim_configs:
+    "optim_name": "AdamW" # Name of any optimizer class in torch.nn.optim
+    "lr": 1.0e-3 

@@ -1,0 +1,11 @@
+**/__pycache__/
+venv/
+venv_torch/
+venv_subnetworks/
+**/wandb
+vision/MeanPooledImageNet/ILSVRC/Data/CLS-LOC/val
+**/eval_stats_logs.csv
+**/accuracy_logs.csv
+**.bin
+**.pt
+vision/MeanPooledImageNet

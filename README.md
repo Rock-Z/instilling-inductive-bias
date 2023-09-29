@@ -12,8 +12,6 @@ Code related to our arithmetic experiments can be found in `math/`, and those re
 
 All of our scripts can be ran by calling the script and supplying a `.yaml` config file. Example config files can be found in the `configs/` directory of each experiment folder.
 
-In addition, we also release the 213k images of Mean-pooled ImageNet we used for our vision experiments. Among these a class-balanced 15.4k is used to train our models, whose file names are recorded in `vision/16-class-ImageNet/downsampled_1000`.
-
 ## Reproducing Results
 
 Subnetwork discovery and subnetwork transfer are done by two different scripts, because one would often want to tune the first before moving on to the second. `ablate.py`, `transfer.py`, `vision_ablate.py`, and `vision_transfer.py` handles these respectively. Note that the vision scripts are capable of handling both ViT and ResNet18 automatically. For space reasons we cannot release all checkpoints, but our released checkpoints folder contains all log files, configs, and random seed used for each experiment.

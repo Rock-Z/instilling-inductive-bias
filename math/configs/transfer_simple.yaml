@@ -1,0 +1,38 @@
+reproducibility_configs:
+    "reproduce": False
+    "random_seed": None
+
+data_configs:
+    "max": 1000
+    "p": 7
+    "n_disambiguation": [100]
+
+model_paths:
+    #"original": "checkpoints/8layers/base"
+    #"subnet": "checkpoints/8layers/subnet/best_circuit_model.pt"
+    "original": "checkpoints/a+ab_12layers/checkpoint-17000"
+    "subnet": "checkpoints/a+ab_ab_subnetwork/best_circuit_model.pt"
+
+circuit_configs:
+    "mask_method": "continuous_sparsification"
+    "mask_hparams":
+        "ablation": "none"
+        "mask_unit": "weight"
+        "mask_bias": False
+        "mask_init_value": -0.1
+    "freeze_base" : False # Must be False since we're no longer doing subnet ablation
+    "add_l0" : False
+
+train_configs:
+    "n_epochs": 100
+    "batch_size": 50
+    # Should be one of "subnet", "subnet_sampled", "subnet_complement", "original", or "random"
+    "inherit_from": [subnet, subnet_sampled, subnet_sampled_complement, original] 
+    "verbose": False
+    "wandb": False
+    "output_path": "checkpoints/tmp"
+
+### Optimizer configs
+optim_configs:
+    "optim_name": "AdamW" # Name of any optimizer class in torch.nn.optim
+    "lr": [2.0e-4]

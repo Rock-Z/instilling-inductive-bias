@@ -1,0 +1,30 @@
+reproducibility_configs:
+    "reproduce": False
+    "random_seed": None
+
+data_configs:
+    "n_samples": 200000
+    "max": 1000
+    "p": 7
+
+# Config for HuggingFace Trainer
+trainer_configs:
+    "output_dir": 'checkpoints/10layers_val/base'
+    "learning_rate": 5.0e-4 
+    "num_train_epochs": 50
+    "evaluation_strategy": "epoch"
+    "logging_strategy": "epoch"
+    "save_strategy": "epoch"
+    "save_total_limit": 1
+    "per_device_train_batch_size": 50
+    "per_device_eval_batch_size": 50
+    "load_best_model_at_end": True
+
+GPT_configs:
+    "vocab_size": 1001 # Vocab size must be at least max + 1
+    "n_positions": 4 
+    "n_embd": 128
+    "n_layer": 10
+    "n_head": 4
+    "resid_pdrop": 0.1
+    "embd_pdrop": 0.1

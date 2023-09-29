@@ -1,0 +1,38 @@
+reproducibility_configs:
+    "reproduce": False
+    "random_seed": None
+
+### Optimization configs
+data_configs:
+    "n_samples": 50000
+    "max": 1000
+    "p": 7
+    "ambiguous": False
+    "computation": "ab"
+
+dataloader_configs:
+    "batch_size": 500
+    "shuffle": True
+
+circuit_configs:
+    "mask_method": "continuous_sparsification"
+    "mask_hparams":
+        "ablation": "none"
+        "mask_unit": "weight"
+        "mask_bias": False
+        "mask_init_value": -0.1
+    "freeze_base" : True
+    "add_l0" : True
+    "l0_lambda" : 1.0e-7
+
+train_configs:
+    "n_epochs": 50
+    "final_temp": 100
+    "model_path": "checkpoints/4layers_val/base"
+    "output_path": "checkpoints/4layers_val/subnet_1e-7"
+    "verbose": True # Will print more intermediate status if True
+
+### Optimizer configs
+optim_configs:
+    "optim_name": "AdamW" # Name of any optimizer class in torch.nn.optim
+    "lr": 1.0e-3 
