@@ -68,6 +68,7 @@ def load_model(train_configs, circuit_configs):
     if isinstance(model, ViTForImageClassification):
         layers_to_ablate = list(map(lambda i: i[0], filter(lambda i: isinstance(i[1], Conv2d) or isinstance(i[1], Linear), model.named_modules())))
     elif isinstance(model, ResNetForImageClassification):
+        raise ValueError("Freezing embeds only work for ViT")
         layers_to_ablate = list(map(lambda i: i[0],filter(lambda i: isinstance(i[1], Conv2d), model.named_modules())))
     else:        
         # Raise error if model is not supported
@@ -83,12 +84,15 @@ def load_model(train_configs, circuit_configs):
     circuit_model.load_state_dict(subnet_state_dict, strict=False)
     circuit_model.init_subnet_transfer()
     
-    # Freeze subnetwork
+    # Reset regular params
     for module in circuit_model.modules():
         if isinstance(module, ContSparseLayer):
-            module.weight_subnet.requires_grad = True
-            if module.mask_bias:
-                module.bias_subnet.requires_grad = True
+            module.weight.requires_grad = True
+            if hasattr(module, "bias") and module.bias != None:
+                module.bias.requires_grad = True
+    
+    # Freeze CLS token
+        circuit_model.root_model.vit.embeddings.cls_token.requires_grad = False
     
     circuit_model.to(device)
     circuit_model.train()
@@ -199,6 +203,14 @@ def main():
     eval_dataloader_pooled = DataLoader(eval_set_pooled, collate_fn=collate_fn,**dataloader_configs)
 
     circuit_model, device = load_model(train_configs, circuit_configs)
+
+    # Print out all trainable parameters as sanity check
+    if verbose:
+        for name, param in circuit_model.named_parameters():
+            if param.requires_grad:
+                print(format("With Grad:", "BOLD"), name)
+            else:
+                print(format("No Grad:", "BOLD"), name)
     
     if torch.cuda.device_count() > 1:
         print(format(f"Using {torch.cuda.device_count()} GPUs", "BOLD"))

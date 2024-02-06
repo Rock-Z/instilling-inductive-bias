@@ -52,7 +52,8 @@ def generate_samples(n_samples : int, max: int, p: int, ambiguous : bool = False
     # Third column is special token
     X[:, 2] = max
     # Fourth column is the answer
-    assert computation in ["a + ab", "a^2 + ab", "2a^2", "2b^2", "ab"]
+    assert computation in ["a + ab", "a^2 + ab", "2a^2", "2b^2", "a^2 + ab + b^2", "a^3 + ab", "a^2 + b^2", "a^2 + ab + b^2 + a", "a^3 + ab + b", "ab", "a^2", "a + b", "a^2 - b^2"]
+    
     if computation == "a^2 + ab":
         X[:, 3] = np.mod(np.square(X[:, 0]) + X[:, 0] * X[:, 1], p)
     elif computation == "a + ab":
@@ -61,8 +62,24 @@ def generate_samples(n_samples : int, max: int, p: int, ambiguous : bool = False
         X[:, 3] = np.mod(2 * np.square(X[:, 0]), p)
     elif computation == "2b^2":
         X[:, 3] = np.mod(2 * np.square(X[:, 1]), p)
+    elif computation == "a^2 + ab + b^2":
+        X[:, 3] = np.mod(np.square(X[:, 0]) + X[:, 0] * X[:, 1] + np.square(X[:, 1]), p)
+    elif computation == "a^3 + ab":
+        X[:, 3] = np.mod(np.power(X[:, 0], 3) + X[:, 0] * X[:, 1], p)
+    elif computation == "a^2 + b^2":
+        X[:, 3] = np.mod(np.square(X[:, 0]) + np.square(X[:, 1]), p)
+    elif computation == "a^2 + ab + b^2 + a":
+        X[:, 3] = np.mod(np.square(X[:, 0]) + X[:, 0] * X[:, 1] + np.square(X[:, 1]) + X[:, 0], p)
+    elif computation == "a^3 + ab + b":
+        X[:, 3] = np.mod(np.power(X[:, 0], 3) + X[:, 0] * X[:, 1] + X[:, 1], p)
+    elif computation == "a^2":
+        X[:, 3] = np.mod(np.square(X[:, 0]), p)
     elif computation == "ab":
         X[:, 3] = np.mod(X[:, 0] * X[:, 1], p)
+    elif computation == "a + b":
+        X[:, 3] = np.mod(X[:, 0] + X[:, 1], p)
+    elif computation == "a^2 - b^2":
+        X[:, 3] = np.mod(np.square(X[:, 0]) - np.square(X[:, 1]), p)
     
     return X
 
